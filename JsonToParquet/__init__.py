@@ -19,7 +19,7 @@ def main(context) -> str:
         processed_data = context['data']
         region = context['region']
 
-        # Convert JSON string to DataFrame using StringIO to avoid the deprecation warning
+        # Convert JSON string to DataFrame using StringIO
         if isinstance(processed_data, str):
             json_data = StringIO(processed_data)
         else:
@@ -29,16 +29,9 @@ def main(context) -> str:
         row_count = len(df)
         logging.info(f"Successfully loaded DataFrame with {len(df)} rows")
 
-        # Save DataFrame to Parquet in mem
+        # Save DataFrame to Parquet in memory
         parquet_buffer = BytesIO()
         df.to_parquet(parquet_buffer, engine='pyarrow', index=False)
-
-        # Get connection string from environment variables
-        connection_string = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
-        if not connection_string:
-            raise ValueError(
-                "AZURE_STORAGE_CONNECTION_STRING environment variable not set. "
-            )
 
         # Get current date
         current_date = datetime.now().strftime("%Y%m%d")
