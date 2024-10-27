@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 import logging
 import json
+from azure.identity import DefaultAzureCredential
 
 logging.basicConfig(level=logging.INFO)
 
@@ -47,9 +48,12 @@ def main(context) -> str:
         # File name with row count and date
         blob_name = f"{folder_name}/{region}_{row_count}_rows_{current_date}.parquet"
 
-        # Initialize Blob Service Client
-        blob_service_client = BlobServiceClient.from_connection_string(
-            connection_string)
+        # Initialize Blob Service Client using Managed Identity
+        credential = DefaultAzureCredential()
+        blob_service_client = BlobServiceClient(
+            account_url="https://depicomparsionstorage.blob.core.windows.net/",
+            credential=credential
+        )
         blob_client = blob_service_client.get_blob_client(
             container=container_name, blob=blob_name)
 
