@@ -95,6 +95,16 @@ def process_data(data, region):
         for col in remaining_cols:
             result[col] = df[col]
 
+        # Ensure all main columns are present
+        main_columns = ['date_column', 'site', 'category', 'brand', 'model_name', 'product_title', 'price', 'os',
+                        'ram_gb', 'storage', 'screen_size_in', 'resolution', 'refresh_rate_hz', 'cpu_speed_ghz',
+                        'connectivity_technology', 'cpu_model', 'color', 'wireless_carrier', 'cellular_technology',
+                        'reviews', 'rate', 'discount', 'product_url', 'image_url', 'asin']
+
+        for col in main_columns:
+            if col not in result.columns:
+                result[col] = np.nan  # Create missing columns with NaN values
+
         return result
 
     df_new = standardize_columns(dff)
@@ -384,7 +394,8 @@ def process_data(data, region):
 
     # Apply the function to fill null values in the 'resolution' column
     df_new['resolution'] = df_new['resolution'].fillna(
-        df_new['product_title'].apply(extract_resolution)).str.lower()
+        df_new['product_title'].apply(extract_resolution))
+    df_new['resolution'] = df_new['resolution'].astype(str).str.lower()
 
     # Extract Refresh Rate
 
