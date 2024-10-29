@@ -734,7 +734,7 @@ def process_data(data, region):
 
         try:
             if region_cur_name in ['egp', 'cad', 'jpy', 'aus']:
-                link = f"https: // www.google.com/search?q = usd+to+{region_cur_name}"
+                link = f"https://www.google.com/search?q=usd+to+{region_cur_name}"
                 driver.get(link)
 
                 cur_element = WebDriverWait(driver, 10).until(
