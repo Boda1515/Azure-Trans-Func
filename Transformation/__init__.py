@@ -255,9 +255,10 @@ def process_data(data, region):
 
         return None
 
-    # Apply the function to fill null values in the 'cellular_technology' column
+    # Apply the function to fill null values in the 'model_name' column
     df_new['model_name'] = df_new['model_name'].fillna(
-        df_new['product_title'].apply(extract_model_name)).str.lower()
+        df_new['product_title'].apply(extract_model_name))
+    df_new['model_name'] = df_new['model_name'].astype(str).str.lower()
 
     # Extract RAM & ROM
 
@@ -347,7 +348,8 @@ def process_data(data, region):
 
     # Apply the function to fill null values in the 'os' column
     df_new['os'] = df_new['os'].fillna(
-        df_new['product_title'].apply(extract_os)).str.lower()
+        df_new['product_title'].apply(extract_os))
+    df_new['os'] = df_new['os'].astype(str).str.lower()
 
     # Extract Screen Size
 
@@ -371,7 +373,8 @@ def process_data(data, region):
 
     # Apply the function to fill null values in the 'screen_size' column
     df_new['screen_size_in'] = df_new['screen_size_in'].fillna(
-        df_new['product_title'].apply(extract_screen_size)).str.lower()
+        df_new['product_title'].apply(extract_screen_size))
+    df_new['screen_size_in'] = df_new['screen_size_in'].astype(str).str.lower()
 
     # Extract Resolution
 
@@ -418,7 +421,9 @@ def process_data(data, region):
 
     # Apply the function to fill null values in the 'refresh_rate' column
     df_new['refresh_rate_hz'] = df_new['refresh_rate_hz'].fillna(
-        df_new['product_title'].apply(extract_refresh_rate)).str.lower()
+        df_new['product_title'].apply(extract_refresh_rate))
+    df_new['refresh_rate_hz'] = df_new['refresh_rate_hz'].astype(
+        str).str.lower()
 
     # Extract CPU Speed
 
@@ -437,7 +442,8 @@ def process_data(data, region):
 
     # Apply the function to fill null values in the 'cpu_speed_ghz' column
     df_new['cpu_speed_ghz'] = df_new['cpu_speed_ghz'].fillna(
-        df_new['product_title'].apply(extract_cpu_speed)).str.lower()
+        df_new['product_title'].apply(extract_cpu_speed))
+    df_new['cpu_speed_ghz'] = df_new['cpu_speed_ghz'].astype(str).str.lower()
 
     # Extract Connectivity Technology
 
@@ -458,7 +464,9 @@ def process_data(data, region):
 
     # Apply the function to fill null values in the 'connectivity_technology' column
     df_new['connectivity_technology'] = df_new['connectivity_technology'].fillna(
-        df_new['product_title'].apply(extract_connectivity_technology)).str.lower()
+        df_new['product_title'].apply(extract_connectivity_technology))
+    df_new['connectivity_technology'] = df_new['connectivity_technology'].astype(
+        str).str.lower()
 
     # Extract CPU Model
 
@@ -478,7 +486,8 @@ def process_data(data, region):
 
     # Apply the function to fill null values in the 'cpu_model' column
     df_new['cpu_model'] = df_new['cpu_model'].fillna(
-        df_new['product_title'].apply(extract_cpu_model)).str.lower()
+        df_new['product_title'].apply(extract_cpu_model))
+    df_new['cpu_model'] = df_new['cpu_model'].astype(str).str.lower()
 
     # Extract Color
 
@@ -498,7 +507,8 @@ def process_data(data, region):
 
     # Apply the function to fill null values in the 'color' column
     df_new['color'] = df_new['color'].fillna(
-        df_new['product_title'].apply(extract_color)).str.lower()
+        df_new['product_title'].apply(extract_color))
+    df_new['color'] = df_new['color'].astype(str).str.lower()
 
     # Extract Wireless Carrier
 
@@ -518,7 +528,9 @@ def process_data(data, region):
 
     # Apply the function to fill null values in the 'wireless_carrier' column
     df_new['wireless_carrier'] = df_new['wireless_carrier'].fillna(
-        df_new['product_title'].apply(extract_wireless_carrier)).str.lower()
+        df_new['product_title'].apply(extract_wireless_carrier))
+    df_new['wireless_carrier'] = df_new['wireless_carrier'].astype(
+        str).str.lower()
 
     # Cellular Technology
 
@@ -537,7 +549,9 @@ def process_data(data, region):
 
     # Apply the function to fill null values in the 'cellular_technology' column
     df_new['cellular_technology'] = df_new['cellular_technology'].fillna(
-        df_new['product_title'].apply(extract_cellular_technology)).str.lower()
+        df_new['product_title'].apply(extract_cellular_technology))
+    df_new['cellular_technology'] = df_new['cellular_technology'].astype(
+        str).str.lower()
 
     # Drop rows where both 'Memory Storage Capacity' and 'RAM Memory Installed Size' are NaN
     df_data_filled = df_new.dropna(subset=['ram_gb', 'storage'], how='all')
@@ -720,7 +734,8 @@ def process_data(data, region):
 
         try:
             if region_cur_name in ['egp', 'cad', 'jpy', 'aus']:
-                link = f"https://www.google.com/search?q=usd+to+{region_cur_name}"
+                link = f"https: // www.google.com/search?q = usd+to+{
+                    region_cur_name}"
                 driver.get(link)
 
                 cur_element = WebDriverWait(driver, 10).until(
