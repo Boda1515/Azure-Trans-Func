@@ -585,7 +585,8 @@ def process_data(data, region):
             'シャオミ': 'xiaomi',
             'エーユー': 'au',
             'グーグル': 'google',
-            '京セラ': 'kyocera'
+            '京セラ': 'kyocera',
+            'ノーブランド品': 'generic'
         }
 
         def clean_single_brand(brand):
@@ -601,6 +602,8 @@ def process_data(data, region):
 
             # Remove any remaining parentheses and clean up whitespace
             brand = re.sub(r'[\(\)]', '', brand).strip()
+
+            brand = re.sub(r'[^a-zA-Z\s]', '', brand).strip()
 
             return brand.lower()
 
@@ -733,7 +736,7 @@ def process_data(data, region):
         driver = web_driver()
 
         try:
-            if region_cur_name in ['egp', 'cad', 'jpy', 'aus']:
+            if region_cur_name in ['egp', 'cad', 'jpy', 'aus', 'sar', 'inr']:
                 link = f"https://www.google.com/search?q=usd+to+{region_cur_name}"
                 driver.get(link)
 
@@ -764,7 +767,7 @@ def process_data(data, region):
         # Define a list of unwanted characters and words to remove
         unwanted_chars = [',', '₹', '$', '£', '€', '₣', '¥']
         unwanted_words = ['egp', 'usd', 'inr', 'eur',
-                          'gbp', 'aud', 'cny', 'cad', 'jpy', 'aus']
+                          'gbp', 'aud', 'cny', 'cad', 'jpy', 'aus', 'sar']
 
         # Remove currency symbols and unwanted words
         for word in unwanted_words:
@@ -825,6 +828,34 @@ def process_data(data, region):
 
     df_data_filled['wireless_carrier'] = df_data_filled['wireless_carrier'].map(
         lambda x: 'unlocked' if x == 'unlocked for all carriers' or x == ' unlocked' else x)
+
+    # ASIN
+    def clean_asin(asin_value):
+        # Handle null/empty cases
+        if not asin_value or pd.isna(asin_value):
+            return None
+
+        # Convert to string if not already
+        asin_str = str(asin_value).strip()
+
+        # Common patterns for ASIN values
+        patterns = [
+            # Matches "ASIN: XX..." or "asin XX..."
+            r'(?i)asin\s*:?\s*([a-z0-9]{10})',
+            # Matches "ASIN CODE: XX..."
+            r'(?i)asin\s*code\s*:?\s*([a-z0-9]{10})',
+            r'^([a-z0-9]{10})$'  # Matches standalone ASIN
+        ]
+
+        # Try each pattern
+        for pattern in patterns:
+            match = re.search(pattern, asin_str)
+            if match:
+                return match.group(1)
+
+        return None
+
+    df_new['asin'] = df_new['asin'].apply(clean_asin)
 
     # Add Network col
 
